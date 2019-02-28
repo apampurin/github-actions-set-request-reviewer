@@ -1,5 +1,12 @@
 #!/bin/sh -eu
 
+ACTION=$(jq -r '.action' < "$GITHUB_EVENT_PATH")
+
+if [ "$ACTION" != opened ]; then
+  echo "This action was ignored. (ACTION: $ACTION)"
+  exit 0
+fi
+
 get_reviewers() {
   _CANDIDARES="$1"
   _AUTHOR="$2"
