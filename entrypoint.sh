@@ -44,9 +44,11 @@ set_reviewers() {
         _REVIEWERS+="$_CANDIDARE,"
       fi
     fi
-    i=$((i++))
+    ((i++))
+    echo "i is $i"
     if [[ $i == 2 ]]; then
       break
+      echo "done!"
     fi
   done
   _REVIEWERS+="]"
