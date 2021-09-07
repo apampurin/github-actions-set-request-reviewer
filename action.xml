@@ -1,0 +1,29 @@
+name: 'Set pool request reviewer'
+description: 'Set pool request reviewer'
+
+inputs:
+   REVIEWERS:
+     description: 'list of user'
+     required: true
+   NUMBER_OF:
+     description: 'how many reviewers need initially'
+     required: true
+   GITHUB_TOKEN:
+     descriprion: 'github access token'
+     required: true
+   FINAL_REVIEW:
+     description: 'Add additional reviewer if first approved.'
+     required: false  
+
+
+runs:
+   using: 'docker'
+   image: 'Dockerfile'
+   args:
+      - ${{ inputs.REVIEWERS}}
+      - ${{ inputs.NUMBER_OF }}
+      - ${{ inputs.GITHUB_TOKEN }}
+      - ${{ inputs.FINAL_REVIEW }}
+branding:
+   icon: 'message-circle'
+   color: 'blue'

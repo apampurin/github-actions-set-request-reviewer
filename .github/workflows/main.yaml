@@ -1,0 +1,18 @@
+name: Set Reviewers
+on:
+  pull_request:
+    types: [ opened, reopened, pull_request_review ]
+
+jobs:
+  set-initial-review:
+    runs-on: [self-hosted, NOGUI]
+    if: github.event.pull_request.state == 'open'
+    name: set first two rewievers
+    steps:
+
+      - name: set reviewers
+        uses: apampurin/github-actions-set-request-reviewer@master
+        with:
+          REVIEWERS: [ list of users ]
+          NUMBER_OF: 2
+          GITHUB_TOKEN: [ GIT TOKEN ]
