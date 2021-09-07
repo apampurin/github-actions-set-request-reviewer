@@ -9,10 +9,12 @@ addInitialReviewers(){
   PULL_REQUEST_NUMBER=$(jq -r '.number' < "$GITHUB_EVENT_PATH")
 
   ENDPOINT="https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PULL_REQUEST_NUMBER/requested_reviewers"
+  
   CONTENTS="{\"reviewers\": $REVIEWERS}"
   HEADER="Accept: application/vnd.github.v3+json"
+  echo $ENDPOINT
   echo $CONTENTS
-  curl -s -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" -d \'"$CONTENTS"\' "$ENDPOINT"
+  curl -s -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "\"$ENDPOINT\"" -d \'"$CONTENTS"\'
 }
 
 addFinalBOSS(){
@@ -25,7 +27,7 @@ addFinalBOSS(){
   CONTENTS="{\"reviewers\": $REVIEWERS}"
   
   HEADER="Accept: application/vnd.github.v3+json"
-  curl -s -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" -d \'"$CONTENTS"\' "$ENDPOINT"
+  curl -s -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "\"$ENDPOINT\"" -d \'"$CONTENTS"\' 
 }
 
 set_reviewers() {
