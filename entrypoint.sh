@@ -11,7 +11,7 @@ addInitialReviewers(){
   
   CONTENTS="{\"reviewers\": $REVIEWERS}"
   HEADER="Accept: application/vnd.github.v3+json"
-  echo \"$ENDPOINT\"
+  echo $ENDPOINT
   echo $CONTENTS
   curl -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "$ENDPOINT" -d "$CONTENTS"
 }
@@ -21,10 +21,15 @@ addFinalBOSS(){
   PULL_REQUEST_NUMBER=$(jq -r '.number' < "$GITHUB_EVENT_PATH")
   CURRENT_REVIEWERS=$(curl -H "Authorization:token $INPUT_GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PULL_REQUEST_NUMBER/requested_reviewers | jq -r '.users | .[].login')
   REVIEWERS="$CURRENT_REVIEWERS"
-  REVIEWERS+=("$BOSS")
+  REVIEWERS+=" $BOSS"
   ENDPOINT="https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PULL_REQUEST_NUMBER/requested_reviewers"
   CONTENTS="{\"reviewers\": $REVIEWERS}"
   
+  echo $CURRENT_REVIEWERS
+  echo $REVIEWERS
+  echo $ENDPOINT
+  echo $CONTENTS
+
   HEADER="Accept: application/vnd.github.v3+json"
   curl -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "$ENDPOINT" -d "$CONTENTS"
 }
@@ -57,5 +62,5 @@ if [ "$ACTION" == opened ]; then
   addInitialReviewers
 fi
 if [ -n $INPUT_FINAL_REVIEW ]; then
-    addFinalBOSS
+  addFinalBOSS
 fi
