@@ -34,10 +34,10 @@ set_reviewers() {
   _NUMBER="$3"
   _REVIEWERS="["
   
-  i=0
+  i=1
   for _CANDIDARE in ${_CANDIDARES[@]}; do
     if [ "$_CANDIDARE" != "$_AUTHOR" ]; then
-      if [ $i == $(( $_NUMBER - 1 )) ]; then
+      if [ $i == $_NUMBER ]; then
         _REVIEWERS+="\"$_CANDIDARE\"]"
         break
       else
@@ -46,7 +46,6 @@ set_reviewers() {
     fi
     ((i++))
   done
-  _REVIEWERS+="]"
   
 
   echo "$_REVIEWERS"
