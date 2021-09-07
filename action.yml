@@ -20,7 +20,7 @@ runs:
    using: 'docker'
    image: 'Dockerfile'
    args:
-      - ${{ inputs.REVIEWERS}}
+      - ${{ inputs.REVIEWERS }}
       - ${{ inputs.NUMBER_OF }}
       - ${{ inputs.GITHUB_TOKEN }}
       - ${{ inputs.FINAL_REVIEW }}
