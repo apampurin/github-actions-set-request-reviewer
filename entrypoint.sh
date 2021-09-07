@@ -29,7 +29,7 @@ set_reviewers() {
   _CANDIDARES="$1"
   _AUTHOR="$2"
   _NUMBER="$3"
-  _REVIEWERS=()
+#  _REVIEWERS=()
   
   echo $_AUTHOR
   i=0
