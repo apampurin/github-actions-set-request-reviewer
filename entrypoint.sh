@@ -34,21 +34,18 @@ set_reviewers() {
   _NUMBER="$3"
   _REVIEWERS="["
   
-  echo $_AUTHOR
   i=0
   for _CANDIDARE in ${_CANDIDARES[@]}; do
     if [ "$_CANDIDARE" != "$_AUTHOR" ]; then
-      if [ $i == 2 ]; then
+      if [ $i == 1 ]; then
         _REVIEWERS+="$_CANDIDARE"
       else
         _REVIEWERS+="$_CANDIDARE,"
       fi
     fi
     ((i++))
-    echo "i is $i"
     if [[ $i == 2 ]]; then
       break
-      echo "done!"
     fi
   done
   _REVIEWERS+="]"
