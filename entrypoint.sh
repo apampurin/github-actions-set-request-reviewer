@@ -20,7 +20,6 @@ addFinalBOSS(){
   BOSS=$INPUT_FINAL_REVIEW
   PULL_REQUEST_API_URL=$(jq -r '.pull_request._links.self.href' < "$GITHUB_EVENT_PATH")
   cat $GITHUB_EVENT_PATH
-  curl -H "Authorization:token $INPUT_GITHUB_TOKEN" "$PULL_REQUEST_API_URL/requested_reviewers"
   CURRENT_REVIEWERS=$(curl -H "Authorization:token $INPUT_GITHUB_TOKEN" "$PULL_REQUEST_API_URL/requested_reviewers" | jq -r '.users | .[].login')
   REVIEWERS=""
   for _REVIEWERS in ${CURRENT_REVIEWERS[@]}; do
@@ -31,7 +30,7 @@ addFinalBOSS(){
     fi
   done
   REVIEWERS+=",\"$BOSS\"]"
-  ENDPOINT="https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PULL_REQUEST_NUMBER/requested_reviewers"
+  ENDPOINT="$PULL_REQUEST_API_URL/requested_reviewers"
   CONTENTS="{\"reviewers\": $REVIEWERS}"
   
   echo $CURRENT_REVIEWERS
