@@ -10,7 +10,7 @@ addInitialReviewers(){
 
   ENDPOINT="https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PULL_REQUEST_NUMBER/requested_reviewers"
   CONTENTS="{\"reviewers\": $REVIEWERS}"
-  HEADER="Accept: application/vnd.github.inertia-preview+json"
+  HEADER="Accept: application/vnd.github.v3+json"
   echo $CONTENTS
   curl -s -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" -d \'"$CONTENTS"\' "$ENDPOINT"
 }
@@ -24,7 +24,7 @@ addFinalBOSS(){
   ENDPOINT="https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PULL_REQUEST_NUMBER/requested_reviewers"
   CONTENTS="{\"reviewers\": $REVIEWERS}"
   
-  HEADER="Accept: application/vnd.github.inertia-preview+json"
+  HEADER="Accept: application/vnd.github.v3+json"
   curl -s -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" -d \'"$CONTENTS"\' "$ENDPOINT"
 }
 
