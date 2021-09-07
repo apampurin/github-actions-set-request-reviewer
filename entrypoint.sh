@@ -1,7 +1,6 @@
 #!/bin/sh -eu
 
 ACTION=$(jq -r '.action' < "$GITHUB_EVENT_PATH")
-$INPUT_GITHUB_TOKEN
 
 addInitialReviewers(){
   AUTHOR=$(jq -r '.pull_request.user.login' < "$GITHUB_EVENT_PATH")
