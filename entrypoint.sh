@@ -1,7 +1,6 @@
 #!/bin/bash
 
 ACTION=$(jq -r '.action' < "$GITHUB_EVENT_PATH")
-echo $INPUT_REVIEWERS
 
 addInitialReviewers(){
   AUTHOR=$(jq -r '.pull_request.user.login' < "$GITHUB_EVENT_PATH")
@@ -14,7 +13,7 @@ addInitialReviewers(){
   HEADER="Accept: application/vnd.github.v3+json"
   echo $ENDPOINT
   echo $CONTENTS
-  curl -s -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "\"$ENDPOINT\"" -d \'"$CONTENTS"\'
+  curl -v -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "\"$ENDPOINT\"" -d \'"$CONTENTS"\'
 }
 
 addFinalBOSS(){
@@ -27,7 +26,7 @@ addFinalBOSS(){
   CONTENTS="{\"reviewers\": $REVIEWERS}"
   
   HEADER="Accept: application/vnd.github.v3+json"
-  curl -s -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "\"$ENDPOINT\"" -d \'"$CONTENTS"\' 
+  curl -v -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "\"$ENDPOINT\"" -d \'"$CONTENTS"\' 
 }
 
 set_reviewers() {
