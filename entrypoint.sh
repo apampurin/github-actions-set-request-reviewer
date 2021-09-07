@@ -9,9 +9,9 @@ addInitialReviewers(){
   PULL_REQUEST_NUMBER=$(jq -r '.number' < "$GITHUB_EVENT_PATH")
 
   ENDPOINT="https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PULL_REQUEST_NUMBER/requested_reviewers"
-  CONTENTS="{\"reviewers\": $REVIEWERS, \"team_reviewers\": []}"
+  CONTENTS="{\"reviewers\": $REVIEWERS}"
   HEADER="Accept: application/vnd.github.inertia-preview+json"
-  curl -s -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" -d "$CONTENTS" "$ENDPOINT"
+  curl -s -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" -d \'"$CONTENTS"\' "$ENDPOINT"
 }
 
 addFinalBOSS(){
@@ -21,28 +21,34 @@ addFinalBOSS(){
   REVIEWERS="$CURRENT_REVIEWERS"
   REVIEWERS+=("$BOSS")
   ENDPOINT="https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PULL_REQUEST_NUMBER/requested_reviewers"
-  CONTENTS="{\"reviewers\": $REVIEWERS, \"team_reviewers\": []}"
+  CONTENTS="{\"reviewers\": $REVIEWERS}"
   HEADER="Accept: application/vnd.github.inertia-preview+json"
-  curl -s -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" -d "$CONTENTS" "$ENDPOINT"
+  curl -s -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" -d \'"$CONTENTS"\' "$ENDPOINT"
 }
 
 set_reviewers() {
   _CANDIDARES="$1"
   _AUTHOR="$2"
   _NUMBER="$3"
-  _REVIEWERS=()
+  _REVIEWERS="["
   
   echo $_AUTHOR
   i=0
   for _CANDIDARE in ${_CANDIDARES[@]}; do
     if [ "$_CANDIDARE" != "$_AUTHOR" ]; then
-        _REVIEWERS+=("$_CANDIDARE")
+      if [ $i == 2 ]; then
+        _REVIEWERS+="$_CANDIDARE"
+      else
+        _REVIEWERS+="$_CANDIDARE,"
+      fi
     fi
     i=$((i++))
     if [[ $i == 2 ]]; then
       break
     fi
   done
+  _REVIEWERS+="]"
+  
 
   echo "$_REVIEWERS"
   unset _AUTHOR _REVIEWERS
