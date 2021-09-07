@@ -37,16 +37,14 @@ set_reviewers() {
   i=0
   for _CANDIDARE in ${_CANDIDARES[@]}; do
     if [ "$_CANDIDARE" != "$_AUTHOR" ]; then
-      if [ $i == 1 ]; then
-        _REVIEWERS+="$_CANDIDARE"
+      if [ $i == (( $_NUMBER - 1 )) ]; then
+        _REVIEWERS+="\"$_CANDIDARE\"]"
+        break
       else
-        _REVIEWERS+="$_CANDIDARE,"
+        _REVIEWERS+="\"$_CANDIDARE\","
       fi
     fi
     ((i++))
-    if [[ $i == 2 ]]; then
-      break
-    fi
   done
   _REVIEWERS+="]"
   
