@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo $INPUT_REVIEWERS
 ACTION=$(jq -r '.action' < "$GITHUB_EVENT_PATH")
 
 addInitialReviewers(){
@@ -21,9 +21,6 @@ addFinalBOSS(){
   PULL_REQUEST_API_URL=$(jq -r '.pull_request._links.self.href' < "$GITHUB_EVENT_PATH")
   ENDPOINT="$PULL_REQUEST_API_URL/requested_reviewers"
   CONTENTS="{\"reviewers\": [\"$BOSS\"]}"
-  
-  echo $ENDPOINT
-  echo $CONTENTS
 
   HEADER="Accept: application/vnd.github.v3+json"
   curl -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "$ENDPOINT" -d "$CONTENTS"
@@ -34,7 +31,7 @@ set_reviewers() {
   _AUTHOR="$2"
   _NUMBER="$3"
   _REVIEWERS="["
-  
+  echo $_CANDIDARES
   i=1
   for _CANDIDARE in ${_CANDIDARES[@]}; do
     if [ "$_CANDIDARE" != "$_AUTHOR" ]; then
