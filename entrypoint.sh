@@ -50,7 +50,7 @@ set_reviewers() {
   unset _AUTHOR _REVIEWERS
 }
 
-if [ "$ACTION" == opened ]; then
+if [ "$ACTION" == opened  ] || [ "$ACTION" == "synchronize" ] || [ "$ACTION" == "reopened" ]; then
   addInitialReviewers
 fi
 if [ -n $INPUT_FINAL_REVIEW ]; then
