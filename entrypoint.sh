@@ -3,12 +3,13 @@ echo $INPUT_REVIEWERS
 ACTION=$(jq -r '.action' < "$GITHUB_EVENT_PATH")
 
 addInitialReviewers(){
+  echo "setting up endpoints for initial request"
   AUTHOR=$(jq -r '.pull_request.user.login' < "$GITHUB_EVENT_PATH")
   REVIEWERS=$(set_reviewers "$INPUT_REVIEWERS" "$AUTHOR" "$INPUT_NUMBER_OF")
   PULL_REQUEST_NUMBER=$(jq -r '.number' < "$GITHUB_EVENT_PATH")
-
   ENDPOINT="https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PULL_REQUEST_NUMBER/requested_reviewers"
   
+  echo "preparing request content"
   CONTENTS="{\"reviewers\": $REVIEWERS}"
   HEADER="Accept: application/vnd.github.v3+json"
   echo $ENDPOINT
@@ -27,6 +28,7 @@ addFinalBOSS(){
 }
 
 set_reviewers() {
+  echo "Setting reviewers array"
   _CANDIDARES="$1"
   _AUTHOR="$2"
   _NUMBER="$3"
@@ -45,12 +47,14 @@ set_reviewers() {
     ((i++))
   done
   
-
+  echo "resulted reviewers array"
   echo "$_REVIEWERS"
   unset _AUTHOR _REVIEWERS
 }
 
-if [ "$ACTION" == opened  ] || [ "$ACTION" == "synchronize" ] || [ "$ACTION" == "reopened" ]; then
+echo "got action - $ACTION"
+if [ "$ACTION" == opened  ] || [ "$ACTION" == synchronize ] || [ "$ACTION" == reopened ]; then
+  echo "initiating first part of reviwers"
   addInitialReviewers
 fi
 if [ -n $INPUT_FINAL_REVIEW ]; then
