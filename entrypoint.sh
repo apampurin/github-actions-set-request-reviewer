@@ -6,15 +6,18 @@ addInitialReviewers(){
   echo "setting up endpoints for initial request"
   AUTHOR=$(jq -r '.pull_request.user.login' < "$GITHUB_EVENT_PATH")
   REVIEWERS=$(set_reviewers "$INPUT_REVIEWERS" "$AUTHOR" "$INPUT_NUMBER_OF")
+  echo "prepared reviewers array: $REVIEWERS"
   PULL_REQUEST_NUMBER=$(jq -r '.number' < "$GITHUB_EVENT_PATH")
-  ENDPOINT="https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PULL_REQUEST_NUMBER/requested_reviewers"
+  ENDPOINT="https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PULL_REQUEST_NUMBER/requested_reviewers" 
   
   echo "preparing request content"
   CONTENTS="{\"reviewers\": $REVIEWERS}"
   HEADER="Accept: application/vnd.github.v3+json"
   echo $ENDPOINT
   echo $CONTENTS
-  curl -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "$ENDPOINT" -d "$CONTENTS"
+  echo "New reviesers:"
+  curl -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "$ENDPOINT" -d "$CONTENTS" | jq '.requested_reviewers  | .[].login'
+  echo "end!"
 }
 
 addFinalBOSS(){
@@ -24,11 +27,12 @@ addFinalBOSS(){
   CONTENTS="{\"reviewers\": [\"$BOSS\"]}"
 
   HEADER="Accept: application/vnd.github.v3+json"
-  curl -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "$ENDPOINT" -d "$CONTENTS"
+  echo "New reviesers:"
+  curl -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "$ENDPOINT" -d "$CONTENTS" | jq '.requested_reviewers  | .[].login'
+  echo "end!"
 }
 
 set_reviewers() {
-  echo "Setting reviewers array"
   _CANDIDARES="$1"
   _AUTHOR="$2"
   _NUMBER="$3"
@@ -46,8 +50,6 @@ set_reviewers() {
     fi
     ((i++))
   done
-  
-  echo "resulted reviewers array"
   echo "$_REVIEWERS"
   unset _AUTHOR _REVIEWERS
 }
