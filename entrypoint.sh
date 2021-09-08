@@ -37,7 +37,6 @@ set_reviewers() {
   _AUTHOR="$2"
   _NUMBER="$3"
   _REVIEWERS="["
-  echo $_CANDIDARES
   i=1
   for _CANDIDARE in ${_CANDIDARES[@]}; do
     if [ "$_CANDIDARE" != "$_AUTHOR" ]; then
