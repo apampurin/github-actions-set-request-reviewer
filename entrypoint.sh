@@ -67,7 +67,7 @@ if [ -n $INPUT_FINAL_REVIEW ]; then
   curl -H "Accept: application/vnd.github.v3+json" -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "$PULL_REQUEST_API_URL/reviews"
   COUNT_APPROVES=$(curl -H "Accept: application/vnd.github.v3+json" -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "$PULL_REQUEST_API_URL/reviews" | jq -r '.[].state' | grep APPROVED | wc -l)
   echo "got $COUNT_APPROVES approves"
-  if [ "$COUNT_APPROVES" == "$INPUT_NUMBER_OF" ]; then
+  if [ "$COUNT_APPROVES" >= "$INPUT_NUMBER_OF" ]; then
     addFinalBOSS
   fi
 fi
