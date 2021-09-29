@@ -69,5 +69,7 @@ if [ -n $INPUT_FINAL_REVIEW ]; then
   echo "got $COUNT_APPROVES approves"
   if (( "$COUNT_APPROVES" >= "$INPUT_NUMBER_OF" )); then
     addFinalBOSS
+    exit 0
   fi
+  exit 1
 fi
