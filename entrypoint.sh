@@ -15,7 +15,7 @@ addInitialReviewers(){
   HEADER="Accept: application/vnd.github.v3+json"
   echo $ENDPOINT
   echo $CONTENTS
-  echo "New revievers:"
+  echo "New reviewers:"
   curl -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "$ENDPOINT" -d "$CONTENTS" | jq '.requested_reviewers  | .[].login'
   echo "end!"
 }
@@ -28,7 +28,7 @@ addFinalBOSS(){
   CONTENTS="{\"reviewers\": [\"$BOSS\"]}"
 
   HEADER="Accept: application/vnd.github.v3+json"
-  echo "New revievers:"
+  echo "New reviewers:"
   curl -X POST -H "Authorization:token $INPUT_GITHUB_TOKEN" -H "$HEADER" "$ENDPOINT" -d "$CONTENTS" | jq '.requested_reviewers  | .[].login'
   echo "end!"
 }
